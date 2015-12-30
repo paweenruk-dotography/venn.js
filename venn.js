@@ -505,6 +505,28 @@
             r1 = p1.radius,
             r2 = p2.radius;
 
+        var compareByErr = function(test, real) {
+            return Math.abs(test - real) / real * 100;
+        };
+        
+        var booleanByErr = function(test, real, err) {
+            if (err === void 0) { err = 1 * Math.pow(10, -12); }
+            return compareByErr(test, real) <= err;
+        };
+        
+        var lessthanByErr = function(a, b) {
+            return a < b || booleanByErr(a, b);
+        };
+        
+        var morethanByErr = function(a, b) {
+            return a > b || booleanByErr(a, b);
+        };
+        
+        // if to far away, or self contained - can't be done
+        if (morethanByErr(d, (r1 + r2)) || lessthanByErr(d, Math.abs(r1 - r2))) {
+            return [];
+        }
+
         // if to far away, or self contained - can't be done
         if ((d >= (r1 + r2)) || (d <= Math.abs(r1 - r2))) {
             return [];
